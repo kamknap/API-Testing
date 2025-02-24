@@ -1,0 +1,260 @@
+{
+	"info": {
+		"_postman_id": "3d601c56-f10e-4b1c-b5f1-3b62816af4e5",
+		"name": "Trello",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42236793"
+	},
+	"item": [
+		{
+			"name": "GET table list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let tableList;\r",
+							"pm.test(\"responseStatus\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"    tableList = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"notEmptyVerify\", function(){\r",
+							"    pm.expect(tableList.length).above(0);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TrelloBaseUrl}}/members/me/boards?key={{TrelloKey}}&token={{TrelloToken}}",
+					"host": [
+						"{{TrelloBaseUrl}}"
+					],
+					"path": [
+						"members",
+						"me",
+						"boards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{TrelloKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{TrelloToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST create table",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"responseStatusVerify\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"titleVerify\", function(){\r",
+							"    pm.expect(resBody.name).eql(pm.collectionVariables.get(\"boardTitle\"));\r",
+							"    pm.collectionVariables.set(\"tabId\", resBody.id);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{TrelloBaseUrl}}/boards?name={{boardTitle}}&key={{TrelloKey}}&token={{TrelloToken}}",
+					"host": [
+						"{{TrelloBaseUrl}}"
+					],
+					"path": [
+						"boards"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{boardTitle}}"
+						},
+						{
+							"key": "key",
+							"value": "{{TrelloKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{TrelloToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT edit table",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"responseStatusVerify\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"nameVerify\", function(){\r",
+							"    pm.expect(resBody.name).eql(pm.collectionVariables.get(\"boardUpdName\"));\r",
+							"})\r",
+							"\r",
+							"pm.test(\"descriptionVerify\", function(){\r",
+							"    pm.expect(resBody.desc).eql(pm.collectionVariables.get(\"boardUpdDesc\"));\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{TrelloBaseUrl}}/boards/{{tabId}}?name={{boardUpdName}}&desc={{boardUpdDesc}}&key={{TrelloKey}}&token={{TrelloToken}}",
+					"host": [
+						"{{TrelloBaseUrl}}"
+					],
+					"path": [
+						"boards",
+						"{{tabId}}"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{boardUpdName}}"
+						},
+						{
+							"key": "desc",
+							"value": "{{boardUpdDesc}}"
+						},
+						{
+							"key": "key",
+							"value": "{{TrelloKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{TrelloToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE delete table",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"responseStatusVerify\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{TrelloBaseUrl}}/boards/{{tabId}}?key={{TrelloKey}}&token={{TrelloToken}}",
+					"host": [
+						"{{TrelloBaseUrl}}"
+					],
+					"path": [
+						"boards",
+						"{{tabId}}"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{TrelloKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{TrelloToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "boardTitle",
+			"value": "TablicaPostman",
+			"type": "string"
+		},
+		{
+			"key": "tabId",
+			"value": ""
+		},
+		{
+			"key": "boardUpdName",
+			"value": "TabPostTestPut",
+			"type": "string"
+		},
+		{
+			"key": "boardUpdDesc",
+			"value": "Test description ",
+			"type": "string"
+		}
+	]
+}
